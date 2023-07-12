@@ -9,17 +9,17 @@ package Model;
  * @author Roberto Marroquín
  */
 public class Gatos {
-    String idGato;
+    String id;
     String url;
     String apiKey = "live_DWTmVl6GnwqPQo9rUqRhAofUVY0chPxQROrWjlPN7RvXbuDiUkMvjZwyVxNbmYQ6";
     String image;
 
-    public String getIdGato() {
-        return idGato;
+    public String getId() {
+        return id;
     }
 
-    public void setIdGato(String idGato) {
-        this.idGato = idGato;
+    public void setId(String idGato) {
+        this.id = idGato;
     }
 
     public String getUrl() {
