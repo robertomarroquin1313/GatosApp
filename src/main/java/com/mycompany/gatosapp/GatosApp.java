@@ -42,6 +42,9 @@ public class GatosApp {
                     GatosService.verFavorito(gato.getApiKey());
                     break;
                 default:
+                    JOptionPane.showMessageDialog(null,"Gracias por usar nuestro programa.",
+                            "GATOS APP",JOptionPane.INFORMATION_MESSAGE);
+                    opMenu=1;
                     break;
 
             }
