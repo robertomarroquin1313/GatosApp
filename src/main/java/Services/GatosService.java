@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
  * @author Roberto Marroquín
  */
 public class GatosService {
-    public static void verGatitos() throws IOException {
+     public static void verGatitos() throws IOException {
         //1. Traer los datos de la api
         OkHttpClient client = new OkHttpClient();
 
@@ -119,33 +119,38 @@ public class GatosService {
     }
 
     public static void verFavorito(String apiKey) throws IOException {
+
         OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder().url("https://api.thecatapi.com/v1/images/search").get()
+        Request request = new Request.Builder()
+                .url("https://api.thecatapi.com/v1/favourites")
+                .get()
                 .addHeader("Content-Type", "application/json")
-                .addHeader("x-api-key", apiKey).build();
-
+                .addHeader("x-api-key", apiKey)
+                .build();
         Response response = client.newCall(request).execute();
 
-        String jsonResponse = response.body().string();
+        String elJson = response.body().string();
+
         //Crear objeto gson
         Gson gson = new Gson();
-        GatosFav[] gatosArray = gson.fromJson(jsonResponse, GatosFav[].class);
+        GatosFav[] gatosArray = gson.fromJson(elJson, GatosFav[].class);
 
         if (gatosArray.length > 0) {
             int min = 1;
             int max = gatosArray.length;
 
-            int aleatorio = (int) (Math.random() * ((max - min) - 1)) + min;
+            int aleatorio = (int) (Math.random() * ((max - min) + 1)) + min;
 
             int indice = aleatorio - 1;
+
             GatosFav gatoFav = gatosArray[indice];
 
             //redimencionar en caso de necesitar
             Image image = null;
 
             try {
-                URL url = new URL(gatoFav.image.getUrl());
+                URL url = new URL(gatoFav.getImage().getUrl());
                 image = ImageIO.read(url);
 
 
@@ -164,7 +169,7 @@ public class GatosService {
                         + "2. Eliminar favorito\n"
                         + "3. Volver al menu\n";
 
-                String[] btns = {"Ver otra imagen", "Borrar favoritos", "Volver"};
+                String[] btns = {"Ver otra imagen", "Borrar favoritos", "Salir"};
                 String idGato = gatoFav.getId();
 
                 String op = (String) JOptionPane.showInputDialog(null, menu, idGato, JOptionPane.INFORMATION_MESSAGE,
@@ -180,14 +185,16 @@ public class GatosService {
 
                 switch (selec) {
                     case 0:
-                        verGatitos();
+                        verFavorito(apiKey);
                         break;
 
                     case 1:
-                        favoritoGato(gatoFav);
+                        borrarFavorito(gatoFav);
                         break;
 
                     default:
+                        JOptionPane.showMessageDialog(null,"Gracias por usar nuestro programa.",
+                            "GATOS APP",JOptionPane.INFORMATION_MESSAGE);
                         break;
 
                 }
@@ -201,7 +208,18 @@ public class GatosService {
 
     }
 
-    public static void favoritoGato(GatosFav gatosFav) {
-
+    public static void borrarFavorito(GatosFav gatosFav) {
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://api.thecatapi.com/v1/favourites/"+gatosFav.getId()+"")
+                    .delete(null)
+                    .addHeader("x-api-key", gatosFav.getApiKey())
+                    .addHeader("Content-Type", "application/json")
+                    .build();
+            Response response = client.newCall(request).execute();
+        }catch (IOException err) {
+            System.out.println("errpr: " + err);
+        }
     }
 }
