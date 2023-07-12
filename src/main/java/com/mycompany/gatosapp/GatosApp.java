@@ -4,6 +4,7 @@
 
 package com.mycompany.gatosapp;
 
+import Model.Gatos;
 import Services.GatosService;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -17,7 +18,7 @@ public class GatosApp {
     public static void main(String[] args) throws IOException {
 
         int opMenu = -1;  
-        String[] btns = {"1. Ver Gatos","2. Salir"};
+        String[] btns = {"1. Ver Gatos","2. Favoritos","3. Salir"};
         
         do{
             //Menu principal
@@ -36,9 +37,13 @@ public class GatosApp {
                 case 0:
                     GatosService.verGatitos();
                     break;
+                case 1:
+                    Gatos gato = new Gatos();
+                    GatosService.verFavorito(gato.getApiKey());
+                    break;
                 default:
                     break;
-                    
+
             }
         }while(opMenu!=1);
     }
