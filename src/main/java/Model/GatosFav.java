@@ -13,7 +13,7 @@ public class GatosFav {
     String image_id;
     String apiKey = "live_DWTmVl6GnwqPQo9rUqRhAofUVY0chPxQROrWjlPN7RvXbuDiUkMvjZwyVxNbmYQ6";
 
-    public Imagex image;
+    Imagex image;
 
     public Imagex getImage() {
         return image;
